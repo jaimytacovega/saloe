@@ -1,6 +1,7 @@
 node_modules/
 package-lock.json
 .github/
+dist/
 
 demos/cloudflare-worker-server/node_modules/
 demos/cloudflare-worker-server/package-lock.json
