@@ -1,0 +1,32 @@
+name = "cloudflare-worker-server"
+main = "server.js"
+compatibility_date = "2022-11-01"
+compatibility_flags = ["transformstream_enable_standard_constructor", "streams_enable_constructors"]
+minify = false
+#node_compat = true
+
+[env]
+
+  [env.prod]
+  experimental-local = true
+
+    [env.prod.vars]
+    IS_CLOUDFLARE_WORKER = true
+    ENV = "prod"
+    APP_NAME = "cloudflare-worker-server"
+
+  [env.qa]
+  experimental-local = true
+
+    [env.qa.vars]
+    IS_CLOUDFLARE_WORKER = true
+    ENV = "qa"
+    APP_NAME = "cloudflare-worker-server"
+
+  [env.dev]  
+  experimental-local = true
+
+    [env.dev.vars]
+    IS_CLOUDFLARE_WORKER = true
+    ENV = "dev"
+    APP_NAME = "cloudflare-worker-server"

@@ -1,0 +1,7 @@
+node_modules/
+package-lock.json
+.github/
+
+demos/cloudflare-worker-server/node_modules/
+demos/cloudflare-worker-server/package-lock.json
+demos/cloudflare-worker-server/.github/

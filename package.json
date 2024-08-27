@@ -1,0 +1,62 @@
+{
+    "name": "@jaimytacovega/salo",
+    "version": "0.0.13",
+    "description": "Tools for making web development easy and efficient",
+    "scripts": {
+        "build": "vite build"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jaimytacovega/salo.git"
+    },
+    "author": "Jaimy Taco",
+    "license": "ISC",
+    "exports": {
+        "./actions": {
+            "import": "./dist/actions.es.js",
+            "require": "./dist/actions.cjs.js"
+        },
+        "./cloudflare-kv": {
+            "import": "./dist/cloudflare-kv.es.js",
+            "require": "./dist/cloudflare-kv.cjs.js"
+        },
+        "./cloudflare-worker": {
+            "import": "./dist/cloudflare-worker.es.js",
+            "require": "./dist/cloudflare-worker.cjs.js"
+        },
+        "./cookie": {
+            "import": "./dist/cookie.es.js",
+            "require": "./dist/cookie.cjs.js"
+        },
+        "./html": {
+            "import": "./dist/html.es.js",
+            "require": "./dist/html.cjs.js"
+        },
+        "./router": {
+            "import": "./dist/router.es.js",
+            "require": "./dist/router.cjs.js"
+        },
+        "./urlpattern": {
+            "import": "./dist/urlpattern.es.js",
+            "require": "./dist/urlpattern.cjs.js"
+        },
+        "./util": {
+            "import": "./dist/util.es.js",
+            "require": "./dist/util.cjs.js"
+        },
+        "./vite": {
+            "import": "./dist/vite.es.js",
+            "require": "./dist/vite.cjs.js"
+        },
+        "./worker": {
+            "import": "./dist/worker.es.js",
+            "require": "./dist/worker.cjs.js"
+        }
+    },
+    "dependencies": {
+        "@cloudflare/kv-asset-handler": "^0.3.4",
+        "fs": "^0.0.1-security",
+        "urlpattern-polyfill": "^10.0.0",
+        "vite": "^5.4.2"
+    }
+}
