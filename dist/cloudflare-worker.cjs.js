@@ -1,1 +1,19 @@
-"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const o=require("@cloudflare/kv-asset-handler"),S=async({request:t,waitUntil:s,manifestJSON:r,env:n})=>{try{const e=JSON.parse(r??{});return{response:await o.getAssetFromKV({request:t,waitUntil:s},{ASSET_NAMESPACE:n.__STATIC_CONTENT,ASSET_MANIFEST:e})}}catch(e){return{err:e}}};exports.getStaticResponse=S;
+"use strict";
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+const kvAssetHandler = require("@cloudflare/kv-asset-handler");
+const getStaticResponse = async ({ request, waitUntil, manifestJSON, env }) => {
+  try {
+    const ASSET_MANIFEST = JSON.parse(manifestJSON ?? {});
+    const response = await kvAssetHandler.getAssetFromKV({
+      request,
+      waitUntil
+    }, {
+      ASSET_NAMESPACE: env.__STATIC_CONTENT,
+      ASSET_MANIFEST
+    });
+    return { response };
+  } catch (err) {
+    return { err };
+  }
+};
+exports.getStaticResponse = getStaticResponse;

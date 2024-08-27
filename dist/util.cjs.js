@@ -1,1 +1,36 @@
-"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const r={Cloudflare:"cloudflare-worker",ServiceWorker:"service-worker",Window:"window"},t={Production:"prod",Development:"dev",Qa:"qa"},i=({env:o})=>o==null?void 0:o.IS_CLOUDFLARE_WORKER,n=({env:o})=>o==null?void 0:o.IS_SERVICE_WORKER,c=()=>typeof window=="object",d=({env:o})=>{if(i({env:o}))return r.Cloudflare;if(n({env:o}))return r.ServiceWorker;if(c())return r.Window},e=({env:o}={})=>{var s;if(i({env:o})||n({env:o}))return o.ENV;if(c())return(s=document==null?void 0:document.body)==null?void 0:s.getAttribute("data-env")},u=({env:o})=>e({env:o})===t.Production,l=({env:o})=>e({env:o})===t.Development,E=({env:o})=>e({env:o})===t.Qa;exports.getEnv=e;exports.getScope=d;exports.isCloudflareWorker=i;exports.isDevEnv=l;exports.isProdEnv=u;exports.isQaEnv=E;exports.isServiceWorker=n;exports.isWindow=c;
+"use strict";
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+const Scope = {
+  Cloudflare: "cloudflare-worker",
+  ServiceWorker: "service-worker",
+  Window: "window"
+};
+const Environment = {
+  Production: "prod",
+  Development: "dev",
+  Qa: "qa"
+};
+const isCloudflareWorker = ({ env }) => env == null ? void 0 : env.IS_CLOUDFLARE_WORKER;
+const isServiceWorker = ({ env }) => env == null ? void 0 : env.IS_SERVICE_WORKER;
+const isWindow = () => typeof window === "object";
+const getScope = ({ env }) => {
+  if (isCloudflareWorker({ env })) return Scope.Cloudflare;
+  if (isServiceWorker({ env })) return Scope.ServiceWorker;
+  if (isWindow()) return Scope.Window;
+};
+const getEnv = ({ env } = {}) => {
+  var _a;
+  if (isCloudflareWorker({ env }) || isServiceWorker({ env })) return env.ENV;
+  if (isWindow()) return (_a = document == null ? void 0 : document.body) == null ? void 0 : _a.getAttribute("data-env");
+};
+const isProdEnv = ({ env }) => getEnv({ env }) === Environment.Production;
+const isDevEnv = ({ env }) => getEnv({ env }) === Environment.Development;
+const isQaEnv = ({ env }) => getEnv({ env }) === Environment.Qa;
+exports.getEnv = getEnv;
+exports.getScope = getScope;
+exports.isCloudflareWorker = isCloudflareWorker;
+exports.isDevEnv = isDevEnv;
+exports.isProdEnv = isProdEnv;
+exports.isQaEnv = isQaEnv;
+exports.isServiceWorker = isServiceWorker;
+exports.isWindow = isWindow;

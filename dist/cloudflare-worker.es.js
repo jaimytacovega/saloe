@@ -1,18 +1,19 @@
-import { getAssetFromKV as n } from "@cloudflare/kv-asset-handler";
-const A = async ({ request: e, waitUntil: r, manifestJSON: s, env: o }) => {
+import { getAssetFromKV } from "@cloudflare/kv-asset-handler";
+const getStaticResponse = async ({ request, waitUntil, manifestJSON, env }) => {
   try {
-    const t = JSON.parse(s ?? {});
-    return { response: await n({
-      request: e,
-      waitUntil: r
+    const ASSET_MANIFEST = JSON.parse(manifestJSON ?? {});
+    const response = await getAssetFromKV({
+      request,
+      waitUntil
     }, {
-      ASSET_NAMESPACE: o.__STATIC_CONTENT,
-      ASSET_MANIFEST: t
-    }) };
-  } catch (t) {
-    return { err: t };
+      ASSET_NAMESPACE: env.__STATIC_CONTENT,
+      ASSET_MANIFEST
+    });
+    return { response };
+  } catch (err) {
+    return { err };
   }
 };
 export {
-  A as getStaticResponse
+  getStaticResponse
 };

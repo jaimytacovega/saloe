@@ -1,33 +1,43 @@
-const w = async ({ callback: a, signal: n, priority: s }) => {
-  var r;
+const executeOnScheduler = async ({ callback, signal, priority }) => {
+  var _a;
   try {
-    return (r = self == null ? void 0 : self.scheduler) != null && r.postTask ? { data: await scheduler.postTask(a, { priority: s, signal: n }) } : { data: await a() };
-  } catch (t) {
-    return { err: t };
+    if (!((_a = self == null ? void 0 : self.scheduler) == null ? void 0 : _a.postTask)) return { data: await callback() };
+    const data = await scheduler.postTask(callback, { priority, signal });
+    return { data };
+  } catch (err) {
+    return { err };
   }
-}, d = ({ callbacks: a, headers: n, status: s }) => {
-  const { readable: r, writable: t } = new TransformStream();
+};
+const stream = ({ callbacks, headers, status }) => {
+  const { readable, writable } = new TransformStream();
+  const done = (async () => {
+    var _a;
+    for (const callback of callbacks) {
+      const abortController = new AbortController();
+      const executeOnSchedulerResult = await executeOnScheduler({ callback, signal: abortController.signal, priority: "background" });
+      const html = (executeOnSchedulerResult == null ? void 0 : executeOnSchedulerResult.err) ?? (executeOnSchedulerResult == null ? void 0 : executeOnSchedulerResult.data);
+      const response = new Response(html, { headers });
+      await ((_a = response.body) == null ? void 0 : _a.pipeTo(writable, { preventClose: true }));
+      abortController.abort();
+    }
+    writable.getWriter().close();
+  })();
   return {
-    done: (async () => {
-      var c;
-      for (const p of a) {
-        const i = new AbortController(), o = await w({ callback: p, signal: i.signal, priority: "background" }), l = (o == null ? void 0 : o.err) ?? (o == null ? void 0 : o.data);
-        await ((c = new Response(l, { headers: n }).body) == null ? void 0 : c.pipeTo(t, { preventClose: !0 })), i.abort();
-      }
-      t.getWriter().close();
-    })(),
-    response: new Response(r, { headers: n, status: s ?? 200 })
+    done,
+    response: new Response(readable, { headers, status: status ?? 200 })
   };
-}, b = async ({ url: a, request: n, ...s }) => {
-  var r;
+};
+const fetch = async ({ url, request, ...config }) => {
+  var _a;
   try {
-    const t = await ((r = self == null ? void 0 : self.fetch(a || n, s)) == null ? void 0 : r.catch((e) => ({ err: e })));
-    return t != null && t.err ? t : { response: t };
-  } catch (t) {
-    return { err: t };
+    const response = await ((_a = self == null ? void 0 : self.fetch(url || request, config)) == null ? void 0 : _a.catch((err) => ({ err })));
+    if (response == null ? void 0 : response.err) return response;
+    return { response };
+  } catch (err) {
+    return { err };
   }
 };
 export {
-  b as fetch,
-  d as stream
+  fetch,
+  stream
 };

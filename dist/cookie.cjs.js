@@ -1,1 +1,18 @@
-"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const t=({key:e,value:o})=>cookieStore==null?void 0:cookieStore.set(e,o),r=({key:e})=>cookieStore==null?void 0:cookieStore.get(e),i=()=>cookieStore==null?void 0:cookieStore.getAll(),k=({key:e})=>cookieStore==null?void 0:cookieStore.delete(e);exports.getAllCookies=i;exports.getCookie=r;exports.removeCookie=k;exports.setCookie=t;
+"use strict";
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+const setCookie = ({ key, value }) => {
+  return cookieStore == null ? void 0 : cookieStore.set(key, value);
+};
+const getCookie = ({ key }) => {
+  return cookieStore == null ? void 0 : cookieStore.get(key);
+};
+const getAllCookies = () => {
+  return cookieStore == null ? void 0 : cookieStore.getAll();
+};
+const removeCookie = ({ key }) => {
+  return cookieStore == null ? void 0 : cookieStore.delete(key);
+};
+exports.getAllCookies = getAllCookies;
+exports.getCookie = getCookie;
+exports.removeCookie = removeCookie;
+exports.setCookie = setCookie;

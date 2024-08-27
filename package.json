@@ -1,6 +1,6 @@
 {
     "name": "@jaimytacovega/salo",
-    "version": "0.0.13",
+    "version": "0.0.28",
     "description": "Tools for making web development easy and efficient",
     "scripts": {
         "build": "vite build"

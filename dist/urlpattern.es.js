@@ -1,6 +1,6 @@
-import * as e from "urlpattern-polyfill";
-self != null && self.URLPattern && (self.URLPattern = e.URLPattern);
-const r = ({ pathname: t }) => new self.URLPattern({ pathname: t });
+import * as URLPatternPolyfill from "urlpattern-polyfill";
+if (self == null ? void 0 : self.URLPattern) self.URLPattern = URLPatternPolyfill.URLPattern;
+const getURLPatern = ({ pathname }) => new self.URLPattern({ pathname });
 export {
-  r as getURLPatern
+  getURLPatern
 };

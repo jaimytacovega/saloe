@@ -1,22 +1,29 @@
-const a = ({ env: n, kv: r }) => n[r], o = async ({ env: n, kv: r, key: e }) => {
-  const t = await c({ env: n, kv: r, key: e });
-  return t != null && t.err ? t : { response: new Response(t == null ? void 0 : t.data) };
-}, c = async ({ env: n, kv: r, key: e }) => {
+const getKV = ({ env, kv }) => env[kv];
+const getKVResponse = async ({ env, kv, key }) => {
+  const result = await getFromKV({ env, kv, key });
+  if (result == null ? void 0 : result.err) return result;
+  const response = new Response(result == null ? void 0 : result.data);
+  return { response };
+};
+const getFromKV = async ({ env, kv, key }) => {
   try {
-    return { data: await a({ env: n, kv: r }).get(e) };
-  } catch (t) {
-    return { err: t };
+    const data = await getKV({ env, kv }).get(key);
+    return { data };
+  } catch (err) {
+    return { err };
   }
-}, p = async ({ env: n, kv: r, key: e, data: t }) => {
+};
+const putInKV = async ({ env, kv, key, data }) => {
   try {
-    return await a({ env: n, kv: r }).put(e, t);
-  } catch (s) {
-    return { err: s };
+    const result = await getKV({ env, kv }).put(key, data);
+    return result;
+  } catch (err) {
+    return { err };
   }
 };
 export {
-  c as getFromKV,
-  a as getKV,
-  o as getKVResponse,
-  p as putInKV
+  getFromKV,
+  getKV,
+  getKVResponse,
+  putInKV
 };

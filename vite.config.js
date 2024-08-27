@@ -4,6 +4,7 @@ import { resolve } from 'path'
 
 export default defineConfig({
     build: {
+        minify: false,
         lib: {
             entry: {
                 actions: resolve(__dirname, 'src/actions.js'),

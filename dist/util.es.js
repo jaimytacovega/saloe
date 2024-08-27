@@ -1,27 +1,36 @@
-const r = {
+const Scope = {
   Cloudflare: "cloudflare-worker",
   ServiceWorker: "service-worker",
   Window: "window"
-}, e = {
+};
+const Environment = {
   Production: "prod",
   Development: "dev",
   Qa: "qa"
-}, n = ({ env: o }) => o == null ? void 0 : o.IS_CLOUDFLARE_WORKER, c = ({ env: o }) => o == null ? void 0 : o.IS_SERVICE_WORKER, d = () => typeof window == "object", s = ({ env: o }) => {
-  if (n({ env: o })) return r.Cloudflare;
-  if (c({ env: o })) return r.ServiceWorker;
-  if (d()) return r.Window;
-}, t = ({ env: o } = {}) => {
-  var i;
-  if (n({ env: o }) || c({ env: o })) return o.ENV;
-  if (d()) return (i = document == null ? void 0 : document.body) == null ? void 0 : i.getAttribute("data-env");
-}, u = ({ env: o }) => t({ env: o }) === e.Production, E = ({ env: o }) => t({ env: o }) === e.Development, a = ({ env: o }) => t({ env: o }) === e.Qa;
+};
+const isCloudflareWorker = ({ env }) => env == null ? void 0 : env.IS_CLOUDFLARE_WORKER;
+const isServiceWorker = ({ env }) => env == null ? void 0 : env.IS_SERVICE_WORKER;
+const isWindow = () => typeof window === "object";
+const getScope = ({ env }) => {
+  if (isCloudflareWorker({ env })) return Scope.Cloudflare;
+  if (isServiceWorker({ env })) return Scope.ServiceWorker;
+  if (isWindow()) return Scope.Window;
+};
+const getEnv = ({ env } = {}) => {
+  var _a;
+  if (isCloudflareWorker({ env }) || isServiceWorker({ env })) return env.ENV;
+  if (isWindow()) return (_a = document == null ? void 0 : document.body) == null ? void 0 : _a.getAttribute("data-env");
+};
+const isProdEnv = ({ env }) => getEnv({ env }) === Environment.Production;
+const isDevEnv = ({ env }) => getEnv({ env }) === Environment.Development;
+const isQaEnv = ({ env }) => getEnv({ env }) === Environment.Qa;
 export {
-  t as getEnv,
-  s as getScope,
-  n as isCloudflareWorker,
-  E as isDevEnv,
-  u as isProdEnv,
-  a as isQaEnv,
-  c as isServiceWorker,
-  d as isWindow
+  getEnv,
+  getScope,
+  isCloudflareWorker,
+  isDevEnv,
+  isProdEnv,
+  isQaEnv,
+  isServiceWorker,
+  isWindow
 };

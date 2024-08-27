@@ -1,1 +1,29 @@
-"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const a=({env:e,kv:n})=>e[n],c=async({env:e,kv:n,key:r})=>{const t=await o({env:e,kv:n,key:r});return t!=null&&t.err?t:{response:new Response(t==null?void 0:t.data)}},o=async({env:e,kv:n,key:r})=>{try{return{data:await a({env:e,kv:n}).get(r)}}catch(t){return{err:t}}},u=async({env:e,kv:n,key:r,data:t})=>{try{return await a({env:e,kv:n}).put(r,t)}catch(s){return{err:s}}};exports.getFromKV=o;exports.getKV=a;exports.getKVResponse=c;exports.putInKV=u;
+"use strict";
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+const getKV = ({ env, kv }) => env[kv];
+const getKVResponse = async ({ env, kv, key }) => {
+  const result = await getFromKV({ env, kv, key });
+  if (result == null ? void 0 : result.err) return result;
+  const response = new Response(result == null ? void 0 : result.data);
+  return { response };
+};
+const getFromKV = async ({ env, kv, key }) => {
+  try {
+    const data = await getKV({ env, kv }).get(key);
+    return { data };
+  } catch (err) {
+    return { err };
+  }
+};
+const putInKV = async ({ env, kv, key, data }) => {
+  try {
+    const result = await getKV({ env, kv }).put(key, data);
+    return result;
+  } catch (err) {
+    return { err };
+  }
+};
+exports.getFromKV = getFromKV;
+exports.getKV = getKV;
+exports.getKVResponse = getKVResponse;
+exports.putInKV = putInKV;
