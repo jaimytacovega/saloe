@@ -6,13 +6,12 @@ It works seamlessly with Cloudflare Workers and Service Workers, and can also be
 
 ## Packages
 
-- **@jaimytacovega/salo/router:** Manage web requests using URLPattern for route matching.
 - [`@jaimytacovega/salo/router`](./src/router.js) - Manage web requests using URLPattern for route matching.
   
-- **@jaimytacovega/salo/html:** Stream HTML templates and render temporary templates while waiting for asynchronous functions to finish processing the final template.
+- [`@jaimytacovega/salo/html`](./src/html.js) - Stream HTML templates and render temporary templates while waiting for asynchronous functions to finish processing the final template.
 
-- **@jaimytacovega/salo/actions:** Add reactivity to HTML nodes with 0kb of initial JavaScript.
+- [`@jaimytacovega/salo/actions`](./src/actions.js) - Add reactivity to HTML nodes with 0kb of initial JavaScript.
 
 ## Coming Soon
 
-- **@jaimytacovega/salo/offline:** Manage browser cache resources to handle HTML template requests.
+- [`@jaimytacovega/salo/offline`](./src/offline.js) Manage browser cache resources to handle HTML template requests.
