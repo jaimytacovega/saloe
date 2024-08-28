@@ -7,6 +7,7 @@ It works seamlessly with Cloudflare Workers and Service Workers, and can also be
 ## Packages
 
 - **@jaimytacovega/salo/router:** Manage web requests using URLPattern for route matching.
+- [`@jaimytacovega/salo/router`](./src/router.js) - Manage web requests using URLPattern for route matching.
   
 - **@jaimytacovega/salo/html:** Stream HTML templates and render temporary templates while waiting for asynchronous functions to finish processing the final template.
 
