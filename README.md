@@ -4,6 +4,8 @@
 
 It works seamlessly with Cloudflare Workers and Service Workers, and can also be used in Node or other server-side JavaScript environments.
 
+**Note:** `salo` is still under development, and version 1.0 is not ready yet. Expect changes and improvements as we work towards the initial release.
+
 ## Packages
 
 - [`@jaimytacovega/salo/router`](./src/router.js) - Manage web requests using URLPattern for route matching.
