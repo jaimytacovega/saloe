@@ -7,7 +7,6 @@ export default defineConfig({
         minify: false,
         lib: {
             entry: {
-                actions: resolve(__dirname, 'src/actions.js'),
                 'cloudflare-kv': resolve(__dirname, 'src/cloudflare-kv.js'),
                 'cloudflare-worker': resolve(__dirname, 'src/cloudflare-worker.js'),
                 cookie: resolve(__dirname, 'src/cookie.js'),

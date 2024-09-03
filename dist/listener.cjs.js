@@ -37,13 +37,13 @@ const listener = () => {
   const fetchListeners = async ({ srcElement, event, e }) => {
     var _a;
     if (!(srcElement == null ? void 0 : srcElement.getAttribute)) return;
-    const scriptNames = srcElement == null ? void 0 : srcElement.getAttribute("on-" + event);
+    const scriptNames = srcElement == null ? void 0 : srcElement.getAttribute(`on-${event}`);
     if (!scriptNames) return;
     if (scriptNames && EVENTS_PREVENT_DEFAULT_MANDATORY.includes(event)) e.preventDefault();
     const scripts = await Promise.all(
       (_a = scriptNames == null ? void 0 : scriptNames.split(",")) == null ? void 0 : _a.map((scriptName) => {
         var _a2;
-        const scriptToImport = "/" + (scriptName == null ? void 0 : scriptName.trim()) + ".js";
+        const scriptToImport = `/${scriptName == null ? void 0 : scriptName.trim()}.js`;
         return (_a2 = import(scriptToImport)) == null ? void 0 : _a2.catch((err) => {
         });
       })
@@ -92,18 +92,18 @@ const listener = () => {
       };
       script.onerror = () => {
         console.error("script failed to load");
-        reject(new Error("Failed to load script with src " + script.src));
+        reject(new Error(`Failed to load script with src ${script.src}`));
       };
       (_b = document == null ? void 0 : document.body) == null ? void 0 : _b.insertAdjacentElement("beforeend", script);
     });
   };
   const fireLoadListener = () => {
     const event = "load";
-    const srcElements = document == null ? void 0 : document.querySelectorAll("[on-" + event + "]");
+    const srcElements = document == null ? void 0 : document.querySelectorAll(`[on-${event}]`);
     srcElements == null ? void 0 : srcElements.forEach(async (srcElement) => {
       const listeners = await fetchListeners({ srcElement, event, e: null });
       executeListeners({ e: null, srcElement, listeners });
-      srcElement == null ? void 0 : srcElement.removeAttribute("on-" + event);
+      srcElement == null ? void 0 : srcElement.removeAttribute(`on-${event}`);
     });
   };
   const fireObserverListeners = () => {
@@ -118,8 +118,8 @@ const listener = () => {
     }, /* @__PURE__ */ new Map())) == null ? void 0 : _a.keys()];
     uniqueScriptNames == null ? void 0 : uniqueScriptNames.forEach(async (scriptName) => {
       var _a2;
-      const observedSrcElements = document.querySelectorAll('[on-observe*="' + scriptName + '"]');
-      const script = await ((_a2 = import("/" + (scriptName == null ? void 0 : scriptName.trim()) + ".js")) == null ? void 0 : _a2.catch((err) => {
+      const observedSrcElements = document.querySelectorAll(`[on-observe*="${scriptName}"]`);
+      const script = await ((_a2 = import(`/${scriptName == null ? void 0 : scriptName.trim()}.js`)) == null ? void 0 : _a2.catch((err) => {
       }));
       const listener2 = getListenerFromScript({ script, event: "observe" });
       if (!listener2) return;
@@ -138,29 +138,29 @@ const listener = () => {
   };
   const getSrcElement = ({ srcElement, event }) => {
     if (!(srcElement == null ? void 0 : srcElement.hasAttribute)) return srcElement;
-    const attribute = "on-" + event;
+    const attribute = `on-${event}`;
     const hasScriptName = srcElement == null ? void 0 : srcElement.hasAttribute(attribute);
     if (hasScriptName) return srcElement;
-    const query = ":is(a, button, li)[" + attribute + "]";
+    const query = `:is(a, button, li)[${attribute}]`;
     const closestButton = srcElement == null ? void 0 : srcElement.closest(query);
     if (closestButton) return closestButton;
     return srcElement;
   };
   const fireListeners = () => {
     EVENTS_FIRE_DOCUMENT_BODY_LISTENERS == null ? void 0 : EVENTS_FIRE_DOCUMENT_BODY_LISTENERS.forEach((event) => {
-      document.body["on" + event] = async (e) => {
+      document.body[`on${event}`] = async (e) => {
         await addScripts();
         fireLoadListener();
         fireObserverListeners();
       };
     });
     EVENTS == null ? void 0 : EVENTS.forEach((event) => {
-      document.body["on" + event] = async (e) => {
+      document.body[`on${event}`] = async (e) => {
         const srcElement = getSrcElement({ srcElement: e == null ? void 0 : e.srcElement, event });
         const listeners = await fetchListeners({ srcElement, event, e });
         executeListeners({ e, srcElement, listeners });
         addListener({ srcElement, event, listeners });
-        if (srcElement == null ? void 0 : srcElement.removeAttribute) srcElement.removeAttribute("on-" + event);
+        if (srcElement == null ? void 0 : srcElement.removeAttribute) srcElement.removeAttribute(`on-${event}`);
       };
     });
   };
