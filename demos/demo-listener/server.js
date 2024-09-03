@@ -2,8 +2,7 @@ import { findPatternFromUrl, getRedirectResponse, getForbiddenResponse, getRoute
 import { getStaticResponse } from 'saloe/cloudflare-worker'
 import { addRoute } from 'saloe/router'
 import { html, stream } from 'saloe/html'
-import { LISTENER_SCRIPT } from 'saloe/actions'
-import { listener, getScriptListener } from 'saloe/listener'
+import { getScriptListener } from 'saloe/listener'
 
 import manifestJSON from '__STATIC_CONTENT_MANIFEST'
 

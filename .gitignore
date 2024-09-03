@@ -1,12 +1,16 @@
 node_modules/
 package-lock.json
 .github/
+.wrangler/
+
 .DS_Store
 
 demos/demo-server/node_modules/
 demos/demo-server/package-lock.json
 demos/demo-server/.github/
+demos/demo-server/.wrangler/
 
 demos/demo-listener/node_modules/
 demos/demo-listener/package-lock.json
 demos/demo-listener/.github/
+demos/demo-listener/.wrangler/
