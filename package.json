@@ -1,6 +1,6 @@
 {
-    "name": "@jaimytacovega/salo",
-    "version": "0.0.28",
+    "name": "saloe",
+    "version": "0.0.2",
     "description": "Tools for making web development easy and efficient",
     "scripts": {
         "build": "vite build"
@@ -31,6 +31,10 @@
         "./html": {
             "import": "./dist/html.es.js",
             "require": "./dist/html.cjs.js"
+        },
+        "./listener": {
+            "import": "./dist/listener.es.js",
+            "require": "./dist/listener.cjs.js"
         },
         "./router": {
             "import": "./dist/router.es.js",

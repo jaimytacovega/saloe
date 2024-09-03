@@ -1,7 +1,7 @@
-import { findPatternFromUrl, getRedirectResponse, getForbiddenResponse, getRoute, getNotFoundResponse, getServerOnlyResponse } from '@jaimytacovega/salo/router'
-import { getStaticResponse } from '@jaimytacovega/salo/cloudflare-worker'
-import { addRoute } from '@jaimytacovega/salo/router'
-import { html, stream } from '@jaimytacovega/salo/html'
+import { findPatternFromUrl, getRedirectResponse, getForbiddenResponse, getRoute, getNotFoundResponse, getServerOnlyResponse } from 'saloe/router'
+import { getStaticResponse } from 'saloe/cloudflare-worker'
+import { addRoute } from 'saloe/router'
+import { html, stream } from 'saloe/html'
 
 
 const isRedirectableCallback = ({ pathname }) => {

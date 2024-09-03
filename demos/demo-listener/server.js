@@ -1,8 +1,9 @@
-import { findPatternFromUrl, getRedirectResponse, getForbiddenResponse, getRoute, getNotFoundResponse, getServerOnlyResponse } from '@jaimytacovega/salo/router'
-import { getStaticResponse } from '@jaimytacovega/salo/cloudflare-worker'
-import { addRoute } from '@jaimytacovega/salo/router'
-import { html, stream } from '@jaimytacovega/salo/html'
-import { LISTENER_SCRIPT } from '@jaimytacovega/salo/actions'
+import { findPatternFromUrl, getRedirectResponse, getForbiddenResponse, getRoute, getNotFoundResponse, getServerOnlyResponse } from 'saloe/router'
+import { getStaticResponse } from 'saloe/cloudflare-worker'
+import { addRoute } from 'saloe/router'
+import { html, stream } from 'saloe/html'
+import { LISTENER_SCRIPT } from 'saloe/actions'
+import { listener, getScriptListener } from 'saloe/listener'
 
 import manifestJSON from '__STATIC_CONTENT_MANIFEST'
 
@@ -13,12 +14,12 @@ const isRedirectableCallback = ({ pathname }) => {
 
 const isForbiddenCallback = ({ request }) => {
     const forbiddenURLs = []   
-    return forbiddenURLs.find((filename) => request?.url?.endsWith(filename))    
+    return forbiddenURLs.find((pathname) => request?.url?.endsWith(pathname))    
 }
 
 const isServerOnlyCallback = ({ request }) => {
     const serverOnlyURLs = []
-    return serverOnlyURLs?.find((filename) => request?.url?.endsWith(filename))
+    return serverOnlyURLs?.find((pathname) => request?.url?.endsWith(pathname))
 }
 
 
@@ -50,7 +51,7 @@ const isServerOnlyCallback = ({ request }) => {
                     </form>
                 `,
                 scripts: () => html`
-                    ${LISTENER_SCRIPT}
+                    ${getScriptListener()}
                     <script>
                         console.log('Hello world!')
                     </script>

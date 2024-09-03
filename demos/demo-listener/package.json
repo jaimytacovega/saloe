@@ -23,7 +23,7 @@
     "license": "ISC",
     "devDependencies": {
         "@cloudflare/kv-asset-handler": "^0.3.4",
-        "@jaimytacovega/salo": "^0.0.28",
+        "saloe": "^0.0.1",
         "vite": "^5.4.2"
     }
 }
