@@ -12,7 +12,7 @@ It works seamlessly with `Cloudflare Workers` and `Service Workers`, and can als
   
 - [`saloe/html`](./src/html.js) - Stream HTML templates and render temporary templates while waiting for asynchronous functions to finish processing the final template.
 
-- [`saloe/actions`](./src/actions.js) - Add reactivity to HTML nodes with 0kb of initial JavaScript.
+- [`saloe/listener`](./src/listener.js) - Add reactivity to HTML nodes with 0kb of initial JavaScript.
 
 ## Coming Soon
 

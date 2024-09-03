@@ -40,14 +40,14 @@ const listener = () => {
     const fetchListeners = async ({ srcElement, event, e }) => {
         if (!srcElement?.getAttribute) return
 
-        const scriptNames = srcElement?.getAttribute('on-' + event)
+        const scriptNames = srcElement?.getAttribute(`on-${event}`)
         if (!scriptNames) return
 
         if (scriptNames && EVENTS_PREVENT_DEFAULT_MANDATORY.includes(event)) e.preventDefault()
 
         const scripts = await Promise.all(
             scriptNames?.split(',')?.map((scriptName) => {
-                const scriptToImport = '/' + scriptName?.trim() + '.js'
+                const scriptToImport = `/${scriptName?.trim()}.js`
                 return import(scriptToImport)?.catch((err) => { })
             })
         )
@@ -105,7 +105,7 @@ const listener = () => {
 
             script.onerror = () => {
                 console.error('script failed to load')
-                reject(new Error('Failed to load script with src ' + script.src))
+                reject(new Error(`Failed to load script with src ${script.src}`))
             }
 
             document?.body?.insertAdjacentElement('beforeend', script)
@@ -115,20 +115,20 @@ const listener = () => {
     // load
     const fireLoadListener = () => {
         const event = 'load'
-        const srcElements = document?.querySelectorAll('[on-' + event + ']')
+        const srcElements = document?.querySelectorAll(`[on-${event}]`)
 
         srcElements?.forEach(async (srcElement) => {
             const listeners = await fetchListeners({ srcElement, event, e: null })
             executeListeners({ e: null, srcElement, listeners })
 
-            srcElement?.removeAttribute('on-' + event)
+            srcElement?.removeAttribute(`on-${event}`)
         })
     }
 
     // invalid
     const fireInvalidListener = () => {
         const event = 'invalid'
-        const srcElements = document?.querySelectorAll('[on-' + event + ']')
+        const srcElements = document?.querySelectorAll(`[on-${event}]`)
 
         srcElements?.forEach(async (srcElement) => {
             const listeners = await fetchListeners({ srcElement, event, e: null })
@@ -139,7 +139,7 @@ const listener = () => {
     // blur
     const fireBlurListener = () => {
         const event = 'blur'
-        const srcElements = document?.querySelectorAll('[on-' + event + ']')
+        const srcElements = document?.querySelectorAll(`[on-${event}]`)
 
         srcElements?.forEach(async (srcElement) => {
             const listeners = await fetchListeners({ srcElement, event, e: null })
@@ -150,7 +150,7 @@ const listener = () => {
     // focus
     const fireFocusListener = () => {
         const event = 'focus'
-        const srcElements = document?.querySelectorAll('[on-' + event + ']')
+        const srcElements = document?.querySelectorAll(`[on-${event}]`)
 
         srcElements?.forEach(async (srcElement) => {
             const listeners = await fetchListeners({ srcElement, event, e: null })
@@ -173,9 +173,9 @@ const listener = () => {
         }, new Map())?.keys()]
 
         uniqueScriptNames?.forEach(async (scriptName) => {
-            const observedSrcElements = document.querySelectorAll('[on-observe*="' + scriptName + '"]')
+            const observedSrcElements = document.querySelectorAll(`[on-observe*="${scriptName}"]`)
 
-            const script = await import('/' + scriptName?.trim() + '.js')?.catch((err) => { })
+            const script = await import(`/${scriptName?.trim()}.js`)?.catch((err) => { })
             const listener = getListenerFromScript({ script, event: 'observe' })
             if (!listener) return
 
@@ -197,11 +197,11 @@ const listener = () => {
 
     const getSrcElement = ({ srcElement, event }) => {
         if (!srcElement?.hasAttribute) return srcElement
-        const attribute = 'on-' + event
+        const attribute = `on-${event}`
         const hasScriptName = srcElement?.hasAttribute(attribute)
         if (hasScriptName) return srcElement
 
-        const query = ':is(a, button, li)[' + attribute + ']'
+        const query = `:is(a, button, li)[${attribute}]`
         const closestButton = srcElement?.closest(query)
         if (closestButton) return closestButton
 
@@ -210,7 +210,7 @@ const listener = () => {
 
     const fireListeners = () => {
         EVENTS_FIRE_DOCUMENT_BODY_LISTENERS?.forEach((event) => {
-            document.body['on' + event] = async (e) => {
+            document.body[`on${event}`] = async (e) => {
                 await addScripts()
 
                 fireLoadListener()
@@ -219,14 +219,14 @@ const listener = () => {
         })
 
         EVENTS?.forEach((event) => {
-            document.body['on' + event] = async (e) => {
+            document.body[`on${event}`] = async (e) => {
                 const srcElement = getSrcElement({ srcElement: e?.srcElement, event })
                 const listeners = await fetchListeners({ srcElement, event, e })
                 
                 executeListeners({ e, srcElement, listeners })
                 addListener({ srcElement, event, listeners })
                 
-                if (srcElement?.removeAttribute) srcElement.removeAttribute('on-' + event)
+                if (srcElement?.removeAttribute) srcElement.removeAttribute(`on-${event}`)
             }
         })
     }

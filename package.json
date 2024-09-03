@@ -1,6 +1,6 @@
 {
     "name": "saloe",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "Tools for making web development easy and efficient",
     "scripts": {
         "build": "vite build",
