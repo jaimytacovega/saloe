@@ -1,29 +1,29 @@
 {
-    "name": "cloudflare-worker-server",
-    "version": "1.0.0",
-    "description": "",
-    "main": "server.js",
-    "scripts": {
-        "watch:dev": "ENV=dev vite build --watch",
-        "watch:qa": "ENV=qa vite build --watch",
-        "watch:prod": "ENV=prod vite build --watch",
-        "build:dev": "ENV=dev vite build",
-        "build:qa": "ENV=qa vite build",
-        "build:prod": "ENV=prod vite build",
-        "local:dev": "wrangler dev --env=dev",
-        "local:qa": "wrangler dev --env=qa",
-        "local:prod": "wrangler dev --env=prod",
-        "deploy:dev": "npm run build:dev && wrangler deploy --env=dev",
-        "deploy:qa": "npm run build:qa && wrangler deploy --env=qa",
-        "deploy:prod": "npm run build:prod && wrangler deploy --env=prod",
-        "build-worker:dev": "wrangler deploy --dry-run --outdir=dist-worker"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "devDependencies": {
-        "@cloudflare/kv-asset-handler": "^0.3.4",
-        "saloe
-        "vite": "^5.4.2"
-    }
+  "name": "demo-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "watch:dev": "ENV=dev vite build --watch",
+    "watch:qa": "ENV=qa vite build --watch",
+    "watch:prod": "ENV=prod vite build --watch",
+    "build:dev": "ENV=dev vite build",
+    "build:qa": "ENV=qa vite build",
+    "build:prod": "ENV=prod vite build",
+    "local:dev": "wrangler dev --env=dev",
+    "local:qa": "wrangler dev --env=qa",
+    "local:prod": "wrangler dev --env=prod",
+    "deploy:dev": "npm run build:dev && wrangler deploy --env=dev",
+    "deploy:qa": "npm run build:qa && wrangler deploy --env=qa",
+    "deploy:prod": "npm run build:prod && wrangler deploy --env=prod",
+    "build-worker:dev": "wrangler deploy --dry-run --outdir=dist-worker"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@cloudflare/kv-asset-handler": "^0.3.4",
+    "saloe": "^0.0.3",
+    "vite": "^5.4.3"
+  }
 }

@@ -12,6 +12,7 @@ export default defineConfig({
                 'cloudflare-worker': resolve(__dirname, 'src/cloudflare-worker.js'),
                 cookie: resolve(__dirname, 'src/cookie.js'),
                 html: resolve(__dirname, 'src/html.js'),
+                listener: resolve(__dirname, 'src/listener.js'),
                 router: resolve(__dirname, 'src/router.js'),
                 'urlpattern': resolve(__dirname, 'src/urlpattern.js'),
                 util: resolve(__dirname, 'src/util.js'),

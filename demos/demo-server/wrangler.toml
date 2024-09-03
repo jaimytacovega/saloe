@@ -1,4 +1,4 @@
-name = "cloudflare-worker-server"
+name = "demo-server"
 main = "server.js"
 compatibility_date = "2022-11-01"
 compatibility_flags = ["transformstream_enable_standard_constructor", "streams_enable_constructors"]
@@ -13,7 +13,7 @@ minify = false
     [env.prod.vars]
     IS_CLOUDFLARE_WORKER = true
     ENV = "prod"
-    APP_NAME = "cloudflare-worker-server"
+    APP_NAME = "demo-server"
 
   [env.qa]
   experimental-local = true
@@ -21,7 +21,7 @@ minify = false
     [env.qa.vars]
     IS_CLOUDFLARE_WORKER = true
     ENV = "qa"
-    APP_NAME = "cloudflare-worker-server"
+    APP_NAME = "demo-server"
 
   [env.dev]  
   experimental-local = true
@@ -29,4 +29,4 @@ minify = false
     [env.dev.vars]
     IS_CLOUDFLARE_WORKER = true
     ENV = "dev"
-    APP_NAME = "cloudflare-worker-server"
+    APP_NAME = "demo-server"

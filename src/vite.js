@@ -1,5 +1,5 @@
-import { promises as fsPromises, stat as fsStat, unlinkSync, existsSync, renameSync } from 'fs'
-import { join, resolve } from 'path'
+import { promises as fsPromises, unlinkSync, existsSync } from 'fs'
+import { join } from 'path'
 
 
 const listFiles = async ({ path }) => {

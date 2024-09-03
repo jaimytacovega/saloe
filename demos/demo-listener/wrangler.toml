@@ -1,4 +1,4 @@
-name = "cloudflare-worker-actions"
+name = "demo-actions"
 main = "server.js"
 compatibility_date = "2022-11-01"
 compatibility_flags = ["transformstream_enable_standard_constructor", "streams_enable_constructors"]
@@ -16,7 +16,7 @@ bucket = "./public"
     [env.prod.vars]
     IS_CLOUDFLARE_WORKER = true
     ENV = "prod"
-    APP_NAME = "cloudflare-worker-actions"
+    APP_NAME = "demo-actions"
 
   [env.qa]
   experimental-local = true
@@ -24,7 +24,7 @@ bucket = "./public"
     [env.qa.vars]
     IS_CLOUDFLARE_WORKER = true
     ENV = "qa"
-    APP_NAME = "cloudflare-worker-actions"
+    APP_NAME = "demo-actions"
 
   [env.dev]  
   experimental-local = true
@@ -32,4 +32,4 @@ bucket = "./public"
     [env.dev.vars]
     IS_CLOUDFLARE_WORKER = true
     ENV = "dev"
-    APP_NAME = "cloudflare-worker-actions"
+    APP_NAME = "demo-actions"

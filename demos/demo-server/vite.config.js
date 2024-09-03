@@ -5,7 +5,7 @@ export default defineConfig({
     define: {
         __ENV__: `'${process.env.ENV}'`,
         __BUILD_TIME__: `'${new Date().toISOString()}'`,
-        __APP_NAME__: `'cloudflare-worker-server'`,
+        __APP_NAME__: `'demo-server'`,
     },
     plugins: [],
     build: {

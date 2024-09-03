@@ -241,28 +241,9 @@ const LISTENER_SCRIPT = html.html(_a || (_a = __template([`
                         executeListeners({ e, srcElement, listeners })
                         addListener({ srcElement, event, listeners })
                         
-                        console.log('--- removeAttribute =', srcElement?.removeAttribute)
                         if (srcElement?.removeAttribute) srcElement.removeAttribute('on-' + event)
                     }
                 })
-
-                // ['mouseover', 'click', 'submit', 'input', 'blur', 'change']?.forEach((event) => {
-                //     document.body['on' + event] = async (e) => {
-                //         if (EVENTS_FIRE_DOCUMENT_BODY_LISTENERS.includes(event)) {
-                //             await addScripts()
-
-                //             fireLoadListener()
-                //             fireInvalidListener()
-                //             fireBlurListener()
-                //             fireFocusListener()
-
-                //             fireObserverListeners()
-                //         }
-
-                //         const srcElement = getSrcElement({ srcElement: e.srcElement, event })
-                //         fetchListeners({ srcElement, event, e })
-                //     }
-                // })
             }
 
             fireListeners()
