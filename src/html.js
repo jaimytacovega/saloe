@@ -44,11 +44,10 @@ const awaitHtml = async ({ pending, success, error }) => {
     const pendingId = `pending_${id}`
     const pendingRoutePathname = `/~/components/${pendingId}`
 
-    const getPage = async () => {
-        const headers = {
-            'Content-Type': 'text/html;charset=utf-8',
-            'Transfer-Encoding': 'chunked',
-        }
+    const route = async () => {
+        const headers = new Headers()
+        headers.append('Content-Type', 'text/html;charset=UTF-8')
+        headers.append('Transfer-Encoding', 'chunked')
         
         const streamResult = streamAsWorker({ 
             callbacks: [
@@ -73,7 +72,7 @@ const awaitHtml = async ({ pending, success, error }) => {
 
     addRoute({
         pathname: pendingRoutePathname,
-        route: { getPage }
+        route,
     })
 
     return html`
