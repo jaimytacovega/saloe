@@ -2,7 +2,6 @@
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const fs = require("fs");
 const path = require("path");
-var _documentCurrentScript = typeof document !== "undefined" ? document.currentScript : null;
 const listFiles = async ({ path: path$1 }) => {
   let allFiles = [];
   try {
@@ -52,8 +51,8 @@ console.log(A${acumIndex})
     })
   );
 };
-const getURLPath = ({ path: path2 }) => new URL(`${path2}`, typeof document === "undefined" ? require("url").pathToFileURL(__filename).href : _documentCurrentScript && _documentCurrentScript.src || new URL("vite.cjs.js", document.baseURI).href).pathname;
-const getInputPaths = async ({ sources }) => {
+const getURLPath = ({ path: path2, metaUrl }) => new URL(`${path2}`, metaUrl).pathname;
+const getInputPaths = async ({ sources, metaUrl }) => {
   var _a;
   try {
     const componentsInfos = await getImportCode({ sources });
@@ -70,14 +69,14 @@ const getInputPaths = async ({ sources }) => {
             if ((componentFilePath == null ? void 0 : componentFilePath.endsWith(".js")) && !(componentFilePath == null ? void 0 : componentFilePath.includes("/actions/"))) return acc;
             const fileName = (_a3 = componentFilePath == null ? void 0 : componentFilePath.split("/")) == null ? void 0 : _a3.pop();
             const componentName = fileName == null ? void 0 : fileName.replace(/\.[^.]+$/, "");
-            acc[componentName] = getURLPath({ path: componentFilePath });
+            acc[componentName] = getURLPath({ path: componentFilePath, metaUrl });
             return acc;
           }, {})
         };
         return acc1;
       }, {}),
-      actionsFilePath: getURLPath({ path: actionsFilePath })
-      // 'sw.worker': getURLPath({ path: '/src/sw.worker.js' }),
+      actionsFilePath: getURLPath({ path: actionsFilePath, metaUrl })
+      // 'sw.worker': getURLPath({ path: '/src/sw.worker.js', metaUrl }),
     };
     return paths;
   } catch (err) {

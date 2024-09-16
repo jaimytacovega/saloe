@@ -49,8 +49,8 @@ console.log(A${acumIndex})
     })
   );
 };
-const getURLPath = ({ path }) => new URL(`${path}`, import.meta.url).pathname;
-const getInputPaths = async ({ sources }) => {
+const getURLPath = ({ path, metaUrl }) => new URL(`${path}`, metaUrl).pathname;
+const getInputPaths = async ({ sources, metaUrl }) => {
   var _a;
   try {
     const componentsInfos = await getImportCode({ sources });
@@ -67,14 +67,14 @@ const getInputPaths = async ({ sources }) => {
             if ((componentFilePath == null ? void 0 : componentFilePath.endsWith(".js")) && !(componentFilePath == null ? void 0 : componentFilePath.includes("/actions/"))) return acc;
             const fileName = (_a3 = componentFilePath == null ? void 0 : componentFilePath.split("/")) == null ? void 0 : _a3.pop();
             const componentName = fileName == null ? void 0 : fileName.replace(/\.[^.]+$/, "");
-            acc[componentName] = getURLPath({ path: componentFilePath });
+            acc[componentName] = getURLPath({ path: componentFilePath, metaUrl });
             return acc;
           }, {})
         };
         return acc1;
       }, {}),
-      actionsFilePath: getURLPath({ path: actionsFilePath })
-      // 'sw.worker': getURLPath({ path: '/src/sw.worker.js' }),
+      actionsFilePath: getURLPath({ path: actionsFilePath, metaUrl })
+      // 'sw.worker': getURLPath({ path: '/src/sw.worker.js', metaUrl }),
     };
     return paths;
   } catch (err) {

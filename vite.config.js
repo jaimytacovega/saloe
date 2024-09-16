@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
 
-
 export default defineConfig({
     build: {
         minify: false,
@@ -30,6 +29,8 @@ export default defineConfig({
                     '@cloudflare/kv-asset-handler': 'getAssetFromKV',
                     'urlpattern-polyfill': 'URLPatternPolyfill',
                 },
+                // Ensure named exports are preserved in the output
+                format: 'es', // 'es' format supports named exports
             },
         },
     },

@@ -41,11 +41,10 @@ const awaitHtml = async ({ pending, success, error }) => {
   const id = Math.floor(Math.random() * 1e9);
   const pendingId = `pending_${id}`;
   const pendingRoutePathname = `/~/components/${pendingId}`;
-  const getPage = async () => {
-    const headers = {
-      "Content-Type": "text/html;charset=utf-8",
-      "Transfer-Encoding": "chunked"
-    };
+  const route = async () => {
+    const headers = new Headers();
+    headers.append("Content-Type", "text/html;charset=UTF-8");
+    headers.append("Transfer-Encoding", "chunked");
     const streamResult = stream$1({
       callbacks: [
         async () => html`
@@ -62,7 +61,7 @@ const awaitHtml = async ({ pending, success, error }) => {
   };
   addRoute({
     pathname: pendingRoutePathname,
-    route: { getPage }
+    route
   });
   return html(_a || (_a = __template(["\n        ", '\n        <script\n            data-script-to-load="await-html_script-', `" 
             type="text/script-to-load"

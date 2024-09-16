@@ -1,10 +1,11 @@
 {
     "name": "saloe",
-    "version": "0.0.7",
+    "version": "0.0.12",
     "description": "Tools for making web development easy and efficient",
+    "type": "module",
     "scripts": {
         "build": "vite build",
-        "publish": "npm run build && npm publish --access public --loglevel verbose"
+        "deploy": "npm run build && npm publish --access public --loglevel verbose"
     },
     "repository": {
         "type": "git",

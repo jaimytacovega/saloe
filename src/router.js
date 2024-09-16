@@ -19,10 +19,16 @@ const findPatternFromUrl = ({ url }) => {
     return patternPathname ? getURLPatern({ pathname: patternPathname }) : null
 }
 
-const getRedirectResponse = ({ origin, pathname, isRedirectableCallback }) => {
-    if (origin !== self?.origin) return
-    const isRedirectable = isRedirectableCallback({ pathname })
+const getRedirectResponse = ({ origin, request, isRedirectableCallback }) => {
+    const url = new URL(request.url)
+    const requestOrigin = url.origin
+    if (origin !== requestOrigin) return
+
+    if (!isRedirectableCallback) return
+
+    const isRedirectable = isRedirectableCallback({ request })
     const response = isRedirectable ? Response.redirect(pathname.slice(0, -1), 301) : null
+
     return { response }
 }
 
@@ -34,16 +40,28 @@ const getNotFoundResponse = async ({ request }) => {
 }
 
 const getForbiddenResponse = ({ origin, request, isForbiddenCallback }) => {  
-    if (origin !== self?.origin) return  
+    const url = new URL(request.url)
+    const requestOrigin = url.origin
+    if (origin !== requestOrigin) return
+
+    if (!isForbiddenCallback) return
+
     const isForbidden = isForbiddenCallback({ request })
     if (!isForbidden) return
+
     return { response: new Response(`${request?.url} is forbidden`, { status: 503 }) }
 }
 
 const getServerOnlyResponse = ({ origin, request, isServerOnlyCallback }) => {
-    if (origin !== self?.origin) return
+    const url = new URL(request.url)
+    const requestOrigin = url.origin
+    if (origin !== requestOrigin) return
+
+    if (!isServerOnlyCallback) return
+
     const isServerOnly = isServerOnlyCallback({ request })
     if (!isServerOnly) return
+    
     return fetchAsWorker({ request })
 }
 

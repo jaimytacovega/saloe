@@ -7,7 +7,9 @@ import { getScriptListener } from 'saloe/listener'
 import manifestJSON from '__STATIC_CONTENT_MANIFEST'
 
 
-const isRedirectableCallback = ({ pathname }) => {
+const isRedirectableCallback = ({ request }) => {
+    const url = new URL(request?.url)
+    const { pathname } = url
     return pathname !== '/' && pathname.endsWith('/')
 }
 
@@ -51,9 +53,9 @@ const isServerOnlyCallback = ({ request }) => {
                 `,
                 scripts: () => html`
                     ${getScriptListener()}
-                    <script>
+                    <!-- <script>
                         console.log('Hello world!')
-                    </script>
+                    </script> -->
                 `,
                 env,
             })
@@ -65,10 +67,14 @@ const isServerOnlyCallback = ({ request }) => {
 const handleFetch = async ({ request, env, ctx }) => {
     const url = new URL(request.url)
     const { origin, pathname } = url
+    console.log('--- origin =', origin)
+    console.log('--- pathname =', pathname)
 
     const pattern = findPatternFromUrl({ url })
+    console.log('--- pattern =', pattern)
 
-    const redirectResult = getRedirectResponse({ origin, pathname, isRedirectableCallback })
+    const redirectResult = getRedirectResponse({ origin, request, isRedirectableCallback })
+    console.log('--- redirectResult =', redirectResult)
     if (redirectResult?.response) return redirectResult.response
 
     const forbiddenResult = getForbiddenResponse({ origin, request, isForbiddenCallback })

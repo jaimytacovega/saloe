@@ -4,9 +4,9 @@ const urlpattern = require("./urlpattern.cjs.js");
 const worker = require("./worker.cjs.js");
 const router = /* @__PURE__ */ new Map();
 const getRouter = () => router;
-const getRoute = ({ pathname }) => router.get(pathname);
-const addRoute = ({ pathname, route }) => router.set(pathname, route);
-const removeRoute = ({ pathname }) => router.delete(pathname);
+const getRoute = ({ pathname: pathname2 }) => router.get(pathname2);
+const addRoute = ({ pathname: pathname2, route }) => router.set(pathname2, route);
+const removeRoute = ({ pathname: pathname2 }) => router.delete(pathname2);
 const findPatternFromUrl = ({ url }) => {
   var _a;
   const patternPathname = [...new Set((_a = getRouter()) == null ? void 0 : _a.keys())].find((patternPathname2) => {
@@ -15,9 +15,12 @@ const findPatternFromUrl = ({ url }) => {
   });
   return patternPathname ? urlpattern.getURLPatern({ pathname: patternPathname }) : null;
 };
-const getRedirectResponse = ({ origin, pathname, isRedirectableCallback }) => {
-  if (origin !== (self == null ? void 0 : self.origin)) return;
-  const isRedirectable = isRedirectableCallback({ pathname });
+const getRedirectResponse = ({ origin, request, isRedirectableCallback }) => {
+  const url = new URL(request.url);
+  const requestOrigin = url.origin;
+  if (origin !== requestOrigin) return;
+  if (!isRedirectableCallback) return;
+  const isRedirectable = isRedirectableCallback({ request });
   const response = isRedirectable ? Response.redirect(pathname.slice(0, -1), 301) : null;
   return { response };
 };
@@ -29,13 +32,19 @@ const getNotFoundResponse = async ({ request }) => {
   return { response };
 };
 const getForbiddenResponse = ({ origin, request, isForbiddenCallback }) => {
-  if (origin !== (self == null ? void 0 : self.origin)) return;
+  const url = new URL(request.url);
+  const requestOrigin = url.origin;
+  if (origin !== requestOrigin) return;
+  if (!isForbiddenCallback) return;
   const isForbidden = isForbiddenCallback({ request });
   if (!isForbidden) return;
   return { response: new Response(`${request == null ? void 0 : request.url} is forbidden`, { status: 503 }) };
 };
 const getServerOnlyResponse = ({ origin, request, isServerOnlyCallback }) => {
-  if (origin !== (self == null ? void 0 : self.origin)) return;
+  const url = new URL(request.url);
+  const requestOrigin = url.origin;
+  if (origin !== requestOrigin) return;
+  if (!isServerOnlyCallback) return;
   const isServerOnly = isServerOnlyCallback({ request });
   if (!isServerOnly) return;
   return worker.fetch({ request });

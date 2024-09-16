@@ -69,9 +69,9 @@ const getImportCode = async ({ sources }) => {
 }
 
 
-const getURLPath = ({ path }) => new URL(`${path}`, import.meta.url).pathname
+const getURLPath = ({ path, metaUrl }) => new URL(`${path}`, metaUrl).pathname
 
-const getInputPaths = async ({ sources }) => {
+const getInputPaths = async ({ sources, metaUrl }) => {
     try {
         const componentsInfos = await getImportCode({ sources })
 
@@ -88,14 +88,14 @@ const getInputPaths = async ({ sources }) => {
                         if (componentFilePath?.endsWith('.js') && !componentFilePath?.includes('/actions/')) return acc
                         const fileName = componentFilePath?.split('/')?.pop()
                         const componentName = fileName?.replace(/\.[^.]+$/, '')
-                        acc[componentName] = getURLPath({ path: componentFilePath })
+                        acc[componentName] = getURLPath({ path: componentFilePath, metaUrl })
                         return acc
                     }, {})
                 }
                 return acc1
             }, {}),
-            actionsFilePath: getURLPath({ path: actionsFilePath }),
-            // 'sw.worker': getURLPath({ path: '/src/sw.worker.js' }),
+            actionsFilePath: getURLPath({ path: actionsFilePath, metaUrl }),
+            // 'sw.worker': getURLPath({ path: '/src/sw.worker.js', metaUrl }),
         }
 
         return paths
