@@ -50,6 +50,8 @@ const isServerOnlyCallback = ({ request }) => {
                         />
                         <button type="submit">Submit!</button>     
                     </form>
+                    <br/>
+                    <button on-click="click">Click</button>
                 `,
                 scripts: () => html`
                     ${getScriptListener()}

@@ -15,6 +15,7 @@ const listener = () => {
         'change',
         'focus',
         'invalid',
+        ...EVENTS_FIRE_DOCUMENT_BODY_LISTENERS,
     ]
 
     const addListener = ({ srcElement, event, listeners }) => {
@@ -209,17 +210,14 @@ const listener = () => {
     }
 
     const fireListeners = () => {
-        EVENTS_FIRE_DOCUMENT_BODY_LISTENERS?.forEach((event) => {
+        EVENTS.forEach((event) => {
             document.body[`on${event}`] = async (e) => {
-                await addScripts()
+                if (EVENTS_FIRE_DOCUMENT_BODY_LISTENERS.includes(event)){
+                    await addScripts()
+                    fireLoadListener()
+                    fireObserverListeners()
+                }
 
-                fireLoadListener()
-                fireObserverListeners()
-            }
-        })
-
-        EVENTS?.forEach((event) => {
-            document.body[`on${event}`] = async (e) => {
                 const srcElement = getSrcElement({ srcElement: e?.srcElement, event })
                 const listeners = await fetchListeners({ srcElement, event, e })
                 

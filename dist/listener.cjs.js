@@ -14,7 +14,8 @@ const listener = () => {
     "blur",
     "change",
     "focus",
-    "invalid"
+    "invalid",
+    ...EVENTS_FIRE_DOCUMENT_BODY_LISTENERS
   ];
   const addListener = ({ srcElement, event, listeners }) => {
     srcElement == null ? void 0 : srcElement.addEventListener(event, (e) => {
@@ -53,6 +54,7 @@ const listener = () => {
   };
   const addScripts = () => {
     const scriptsToLoad = [...document.querySelectorAll("script[data-script-to-load]")];
+    console.log("--- scriptsToLoad =", scriptsToLoad);
     return Promise.all(
       scriptsToLoad == null ? void 0 : scriptsToLoad.map((scriptToLoad) => {
         var _a;
@@ -147,15 +149,13 @@ const listener = () => {
     return srcElement;
   };
   const fireListeners = () => {
-    EVENTS_FIRE_DOCUMENT_BODY_LISTENERS == null ? void 0 : EVENTS_FIRE_DOCUMENT_BODY_LISTENERS.forEach((event) => {
+    EVENTS.forEach((event) => {
       document.body[`on${event}`] = async (e) => {
-        await addScripts();
-        fireLoadListener();
-        fireObserverListeners();
-      };
-    });
-    EVENTS == null ? void 0 : EVENTS.forEach((event) => {
-      document.body[`on${event}`] = async (e) => {
+        if (EVENTS_FIRE_DOCUMENT_BODY_LISTENERS.includes(event)) {
+          await addScripts();
+          fireLoadListener();
+          fireObserverListeners();
+        }
         const srcElement = getSrcElement({ srcElement: e == null ? void 0 : e.srcElement, event });
         const listeners = await fetchListeners({ srcElement, event, e });
         executeListeners({ e, srcElement, listeners });
