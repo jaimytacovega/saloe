@@ -1,6 +1,6 @@
 {
     "name": "saloe",
-    "version": "0.0.21",
+    "version": "0.0.27",
     "description": "Tools for making web development easy and efficient",
     "type": "module",
     "scripts": {

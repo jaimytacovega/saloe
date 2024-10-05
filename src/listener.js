@@ -1,4 +1,6 @@
-const listener = () => {
+const listener = ({ 
+    SRC_ELEMEMENTS_QUERY = [] 
+} = {}) => {
     const EVENTS_PREVENT_DEFAULT_MANDATORY = [
         'submit'
     ]
@@ -202,7 +204,7 @@ const listener = () => {
         const hasScriptName = srcElement?.hasAttribute(attribute)
         if (hasScriptName) return srcElement
 
-        const query = `:is(a, button, li)[${attribute}]`
+        const query = `:is(${['a', 'button', ...SRC_ELEMEMENTS_QUERY].join(',')})[${attribute}]`
         const closestButton = srcElement?.closest(query)
         if (closestButton) return closestButton
 
@@ -238,8 +240,10 @@ const listener = () => {
     }
 }
 
-const getScriptListener = () => {
-    return `<script defer>(${listener.toString()})()</script>`
+const getScriptListener = ({ 
+    SRC_ELEMEMENTS_QUERY = [],
+} = {}) => {
+    return `<script defer>(${listener.toString()})({ SRC_ELEMEMENTS_QUERY: ${JSON.stringify(SRC_ELEMEMENTS_QUERY)} })</script>`
 }
 
 export {
