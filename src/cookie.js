@@ -1,7 +1,7 @@
-import { cookieStore } from 'cookie-store'
+import * as CookieStorePolyfill from 'cookie-store'
 
 
-self.cookieStore = self?.cookieStore ?? cookieStore
+if (!self.cookieStore) self.cookieStore = CookieStorePolyfill.cookieStore
 
 const setCookie = ({ key, value, config }) => {
     return self.cookieStore?.set(key, value, config)
