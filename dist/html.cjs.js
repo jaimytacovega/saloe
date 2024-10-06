@@ -26,8 +26,7 @@ const stream = ({ head, body, scripts, env, status, args }) => {
             <body 
                 data-scope="${util.getScope({ env })}" 
                 data-env="${util.getEnv({ env })}" 
-                ${(args == null ? void 0 : args.isPublic) ?? ""}
-                ${(args == null ? void 0 : args.isLoading) ?? ""}
+                ${args ?? ""}
             >
         `,
     body,
