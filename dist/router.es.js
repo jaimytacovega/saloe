@@ -2,9 +2,9 @@ import { getURLPatern } from "./urlpattern.es.js";
 import { fetch } from "./worker.es.js";
 const router = /* @__PURE__ */ new Map();
 const getRouter = () => router;
-const getRoute = ({ pathname: pathname2 }) => router.get(pathname2);
-const addRoute = ({ pathname: pathname2, route }) => router.set(pathname2, route);
-const removeRoute = ({ pathname: pathname2 }) => router.delete(pathname2);
+const getRoute = ({ pathname }) => router.get(pathname);
+const addRoute = ({ pathname, route }) => router.set(pathname, route);
+const removeRoute = ({ pathname }) => router.delete(pathname);
 const findPatternFromUrl = ({ url }) => {
   var _a;
   const patternPathname = [...new Set((_a = getRouter()) == null ? void 0 : _a.keys())].find((patternPathname2) => {
@@ -18,9 +18,7 @@ const getRedirectResponse = ({ origin, request, isRedirectableCallback }) => {
   const requestOrigin = url.origin;
   if (origin !== requestOrigin) return;
   if (!isRedirectableCallback) return;
-  const isRedirectable = isRedirectableCallback({ request });
-  const response = isRedirectable ? Response.redirect(pathname.slice(0, -1), 301) : null;
-  return { response };
+  return isRedirectableCallback({ request });
 };
 const getNotFoundResponse = async ({ request }) => {
   var _a;

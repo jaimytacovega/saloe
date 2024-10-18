@@ -51,7 +51,8 @@ const listener = ({
         const scripts = await Promise.all(
             scriptNames?.split(',')?.map((scriptName) => {
                 const scriptToImport = `/${scriptName?.trim()}.js`
-                return import(scriptToImport)?.catch((err) => { })
+                // return import(scriptToImport)?.catch((err) => { })
+                return importScriptDynamically({ path: scriptToImport })
             })
         )
 
@@ -113,6 +114,11 @@ const listener = ({
 
             document?.body?.insertAdjacentElement('beforeend', script)
         })
+    }
+
+    // FIX: return import() to prevent __vitePreload to take action
+    const importScriptDynamically = ({ path }) => {
+        return import(path)?.catch((err) => { })
     }
 
     // load
@@ -178,7 +184,8 @@ const listener = ({
         uniqueScriptNames?.forEach(async (scriptName) => {
             const observedSrcElements = document.querySelectorAll(`[on-observe*="${scriptName}"]`)
 
-            const script = await import(`/${scriptName?.trim()}.js`)?.catch((err) => { })
+            // const script = await import(`/${scriptName?.trim()}.js`)?.catch((err) => { })
+            const script = await importScriptDynamically({ path: `/${scriptName?.trim()}.js` })
             const listener = getListenerFromScript({ script, event: 'observe' })
             if (!listener) return
 

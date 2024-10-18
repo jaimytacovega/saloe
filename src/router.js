@@ -26,10 +26,10 @@ const getRedirectResponse = ({ origin, request, isRedirectableCallback }) => {
 
     if (!isRedirectableCallback) return
 
-    const isRedirectable = isRedirectableCallback({ request })
-    const response = isRedirectable ? Response.redirect(pathname.slice(0, -1), 301) : null
+    // const isRedirectable = isRedirectableCallback({ request })
+    // const response = isRedirectable ? Response.redirect(url.pathname.slice(0, -1), 301) : null
 
-    return { response }
+    return isRedirectableCallback({ request })
 }
 
 const getNotFoundResponse = async ({ request }) => {

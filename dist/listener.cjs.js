@@ -45,10 +45,8 @@ const listener = ({
     if (scriptNames && EVENTS_PREVENT_DEFAULT_MANDATORY.includes(event)) e.preventDefault();
     const scripts = await Promise.all(
       (_a = scriptNames == null ? void 0 : scriptNames.split(",")) == null ? void 0 : _a.map((scriptName) => {
-        var _a2;
         const scriptToImport = `/${scriptName == null ? void 0 : scriptName.trim()}.js`;
-        return (_a2 = import(scriptToImport)) == null ? void 0 : _a2.catch((err) => {
-        });
+        return importScriptDynamically({ path: scriptToImport });
       })
     );
     const listeners = scripts == null ? void 0 : scripts.map((script) => getListenerFromScript({ script, event }));
@@ -100,6 +98,11 @@ const listener = ({
       (_b = document == null ? void 0 : document.body) == null ? void 0 : _b.insertAdjacentElement("beforeend", script);
     });
   };
+  const importScriptDynamically = ({ path }) => {
+    var _a;
+    return (_a = import(path)) == null ? void 0 : _a.catch((err) => {
+    });
+  };
   const fireLoadListener = () => {
     const event = "load";
     const srcElements = document == null ? void 0 : document.querySelectorAll(`[on-${event}]`);
@@ -120,20 +123,18 @@ const listener = ({
       return acc;
     }, /* @__PURE__ */ new Map())) == null ? void 0 : _a.keys()];
     uniqueScriptNames == null ? void 0 : uniqueScriptNames.forEach(async (scriptName) => {
-      var _a2;
       const observedSrcElements = document.querySelectorAll(`[on-observe*="${scriptName}"]`);
-      const script = await ((_a2 = import(`/${scriptName == null ? void 0 : scriptName.trim()}.js`)) == null ? void 0 : _a2.catch((err) => {
-      }));
+      const script = await importScriptDynamically({ path: `/${scriptName == null ? void 0 : scriptName.trim()}.js` });
       const listener2 = getListenerFromScript({ script, event: "observe" });
       if (!listener2) return;
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => listener2({ entry, observer }));
       });
       observedSrcElements == null ? void 0 : observedSrcElements.forEach((observerSrcElement) => {
-        var _a3, _b;
+        var _a2, _b;
         observer.observe(observerSrcElement);
         const observerAttr = observerSrcElement == null ? void 0 : observerSrcElement.getAttribute("on-observe");
-        const updatedObserverAttr = (_b = (_a3 = observerAttr == null ? void 0 : observerAttr.replaceAll(scriptName + ", ", "")) == null ? void 0 : _a3.replaceAll(", " + scriptName, "")) == null ? void 0 : _b.replaceAll(scriptName, "");
+        const updatedObserverAttr = (_b = (_a2 = observerAttr == null ? void 0 : observerAttr.replaceAll(scriptName + ", ", "")) == null ? void 0 : _a2.replaceAll(", " + scriptName, "")) == null ? void 0 : _b.replaceAll(scriptName, "");
         if (updatedObserverAttr === "") observerSrcElement.removeAttribute("on-observe");
         else observerSrcElement.setAttribute("on-observe", updatedObserverAttr);
       });

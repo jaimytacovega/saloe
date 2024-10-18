@@ -11,6 +11,7 @@ export default defineConfig({
                 cookie: resolve(__dirname, 'src/cookie.js'),
                 html: resolve(__dirname, 'src/html.js'),
                 listener: resolve(__dirname, 'src/listener.js'),
+                offline: resolve(__dirname, 'src/offline.js'),
                 router: resolve(__dirname, 'src/router.js'),
                 'urlpattern': resolve(__dirname, 'src/urlpattern.js'),
                 util: resolve(__dirname, 'src/util.js'),

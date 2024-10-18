@@ -18,6 +18,6 @@ function _interopNamespaceDefault(e) {
   return Object.freeze(n);
 }
 const URLPatternPolyfill__namespace = /* @__PURE__ */ _interopNamespaceDefault(URLPatternPolyfill);
-self.URLPattern = (self == null ? void 0 : self.URLPattern) ?? URLPatternPolyfill__namespace.URLPattern;
+if (!self.URLPattern) self.URLPattern = URLPatternPolyfill__namespace.URLPattern;
 const getURLPatern = ({ pathname }) => new self.URLPattern({ pathname });
 exports.getURLPatern = getURLPatern;

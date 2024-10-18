@@ -99,3 +99,4 @@ const getPlugin = () => {
 };
 exports.getInputPaths = getInputPaths;
 exports.getPlugin = getPlugin;
+exports.getURLPath = getURLPath;

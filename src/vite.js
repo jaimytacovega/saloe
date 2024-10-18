@@ -124,4 +124,5 @@ const getPlugin = () => {
 export {
     getInputPaths,
     getPlugin,
+    getURLPath,
 }

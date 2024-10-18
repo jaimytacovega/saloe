@@ -1,6 +1,6 @@
 {
     "name": "saloe",
-    "version": "0.0.30",
+    "version": "0.0.36",
     "description": "Tools for making web development easy and efficient",
     "type": "module",
     "scripts": {
@@ -37,6 +37,10 @@
         "./listener": {
             "import": "./dist/listener.es.js",
             "require": "./dist/listener.cjs.js"
+        },
+        "./offline": {
+            "import": "./dist/offline.es.js",
+            "require": "./dist/offline.cjs.js"
         },
         "./router": {
             "import": "./dist/router.es.js",

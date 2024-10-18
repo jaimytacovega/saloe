@@ -97,5 +97,6 @@ const getPlugin = () => {
 };
 export {
   getInputPaths,
-  getPlugin
+  getPlugin,
+  getURLPath
 };

@@ -263,7 +263,7 @@ if (!("cookies" in ServiceWorkerRegistration.prototype)) {
   });
 }
 const cookieStore = Object.create(CookieStore.prototype);
-self.cookieStore = (self == null ? void 0 : self.cookieStore) ?? cookieStore;
+if (!self.cookieStore) self.cookieStore = cookieStore;
 const setCookie = ({ key, value, config }) => {
   var _a;
   return (_a = self.cookieStore) == null ? void 0 : _a.set(key, value, config);
