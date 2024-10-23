@@ -69,7 +69,7 @@ const awaitHtml = async ({ pending, success, error }) => {
         >
             (async () => {
                 const pendingEl = document?.querySelector('[data-await-pending-template="`, `"]')
-                const response = await fetch('`, "')\n                const templateString = await response.text()\n                pendingEl.outerHTML = templateString\n            })()\n        <\/script>\n    "])), await pending({ id: pendingId }), id, pendingId, pendingRoutePathname);
+                const response = await fetch('`, "')\n                const templateString = await response.text()\n                pendingEl.outerHTML = templateString\n\n                if (document?.body?.saloeListen) document?.body?.saloeListen()\n            })()\n        <\/script>\n    "])), await pending({ id: pendingId }), id, pendingId, pendingRoutePathname);
 };
 exports.awaitHtml = awaitHtml;
 exports.html = html;

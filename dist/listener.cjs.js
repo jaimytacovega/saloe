@@ -6,50 +6,50 @@ const listener = ({
   const EVENTS_PREVENT_DEFAULT_MANDATORY = [
     "submit"
   ];
-  const EVENTS_FIRE_DOCUMENT_BODY_LISTENERS = [
-    "mouseover",
-    "click"
-  ];
   const EVENTS = [
+    "mouseover",
+    "click",
     "submit",
     "input",
     "blur",
     "change",
     "focus",
-    "invalid",
-    ...EVENTS_FIRE_DOCUMENT_BODY_LISTENERS
+    "invalid"
   ];
-  const addListener = ({ srcElement, event, listeners }) => {
-    srcElement == null ? void 0 : srcElement.addEventListener(event, (e) => {
-      executeListeners({ e, srcElement, listeners });
+  const addListener = ({ srcElement, eventName, listeners, afterExecuteListeners }) => {
+    srcElement == null ? void 0 : srcElement.addEventListener(eventName, (e) => {
+      executeListeners({ e, srcElement, listeners, afterExecuteListeners });
     });
   };
-  const executeListeners = ({ e, srcElement, listeners }) => {
-    listeners == null ? void 0 : listeners.forEach((listener2) => {
-      if (listener2) listener2({ e, srcElement });
-    });
+  const executeListeners = async ({ e, srcElement, listeners, afterExecuteListeners }) => {
+    await Promise.all(
+      (listeners ?? []).map((listener2) => {
+        if (listener2) return listener2({ e, srcElement });
+      })
+    );
+    if (afterExecuteListeners) await afterExecuteListeners();
   };
-  const getListenerFromScript = ({ script, event }) => {
+  const getListenerFromScript = ({ script, eventName }) => {
     var _a;
     if (!script) return null;
-    if (script[event]) return script[event];
-    const prev = (_a = Object.keys(script)) == null ? void 0 : _a.find((key) => script[key][event]);
+    if (script[eventName]) return script[eventName];
+    const prev = (_a = Object.keys(script)) == null ? void 0 : _a.find((key) => script[key][eventName]);
     if (!prev) return null;
-    return script[prev][event];
+    return script[prev][eventName];
   };
-  const fetchListeners = async ({ srcElement, event, e }) => {
+  const fetchListeners = async ({ srcElement, eventName, e }) => {
     var _a;
     if (!(srcElement == null ? void 0 : srcElement.getAttribute)) return;
-    const scriptNames = srcElement == null ? void 0 : srcElement.getAttribute(`on-${event}`);
+    const scriptNames = srcElement == null ? void 0 : srcElement.getAttribute(`on-${eventName}`);
     if (!scriptNames) return;
-    if (scriptNames && EVENTS_PREVENT_DEFAULT_MANDATORY.includes(event)) e.preventDefault();
+    if (e && scriptNames && EVENTS_PREVENT_DEFAULT_MANDATORY.includes(eventName)) e.preventDefault();
     const scripts = await Promise.all(
       (_a = scriptNames == null ? void 0 : scriptNames.split(",")) == null ? void 0 : _a.map((scriptName) => {
         const scriptToImport = `/${scriptName == null ? void 0 : scriptName.trim()}.js`;
         return importScriptDynamically({ path: scriptToImport });
       })
     );
-    const listeners = scripts == null ? void 0 : scripts.map((script) => getListenerFromScript({ script, event }));
+    const listeners = scripts == null ? void 0 : scripts.map((script) => getListenerFromScript({ script, eventName }));
     return listeners;
   };
   const addScripts = () => {
@@ -104,12 +104,12 @@ const listener = ({
     });
   };
   const fireLoadListener = () => {
-    const event = "load";
-    const srcElements = document == null ? void 0 : document.querySelectorAll(`[on-${event}]`);
+    const eventName = "load";
+    const srcElements = document == null ? void 0 : document.querySelectorAll(`[on-${eventName}]`);
     srcElements == null ? void 0 : srcElements.forEach(async (srcElement) => {
-      const listeners = await fetchListeners({ srcElement, event, e: null });
+      const listeners = await fetchListeners({ srcElement, eventName, e: null });
       executeListeners({ e: null, srcElement, listeners });
-      srcElement == null ? void 0 : srcElement.removeAttribute(`on-${event}`);
+      srcElement == null ? void 0 : srcElement.removeAttribute(`on-${eventName}`);
     });
   };
   const fireObserverListeners = () => {
@@ -125,24 +125,26 @@ const listener = ({
     uniqueScriptNames == null ? void 0 : uniqueScriptNames.forEach(async (scriptName) => {
       const observedSrcElements = document.querySelectorAll(`[on-observe*="${scriptName}"]`);
       const script = await importScriptDynamically({ path: `/${scriptName == null ? void 0 : scriptName.trim()}.js` });
-      const listener2 = getListenerFromScript({ script, event: "observe" });
+      const listener2 = getListenerFromScript({ script, eventName: "observe" });
       if (!listener2) return;
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => listener2({ entry, observer }));
+      }, {
+        threshold: 0.5
       });
       observedSrcElements == null ? void 0 : observedSrcElements.forEach((observerSrcElement) => {
         var _a2, _b;
         observer.observe(observerSrcElement);
         const observerAttr = observerSrcElement == null ? void 0 : observerSrcElement.getAttribute("on-observe");
         const updatedObserverAttr = (_b = (_a2 = observerAttr == null ? void 0 : observerAttr.replaceAll(scriptName + ", ", "")) == null ? void 0 : _a2.replaceAll(", " + scriptName, "")) == null ? void 0 : _b.replaceAll(scriptName, "");
-        if (updatedObserverAttr === "") observerSrcElement.removeAttribute("on-observe");
+        if (!updatedObserverAttr) observerSrcElement.removeAttribute("on-observe");
         else observerSrcElement.setAttribute("on-observe", updatedObserverAttr);
       });
     });
   };
-  const getSrcElement = ({ srcElement, event }) => {
+  const getSrcElement = ({ srcElement, eventName }) => {
     if (!(srcElement == null ? void 0 : srcElement.hasAttribute)) return srcElement;
-    const attribute = `on-${event}`;
+    const attribute = `on-${eventName}`;
     const hasScriptName = srcElement == null ? void 0 : srcElement.hasAttribute(attribute);
     if (hasScriptName) return srcElement;
     const query = `:is(${["a", "button", ...SRC_ELEMEMENTS_QUERY].join(",")})[${attribute}]`;
@@ -150,27 +152,52 @@ const listener = ({
     if (closestButton) return closestButton;
     return srcElement;
   };
+  const cloneSrcElement = ({ srcElement }) => {
+    const newSrcElement = document.createElement(srcElement == null ? void 0 : srcElement.tagName);
+    Array.from(srcElement == null ? void 0 : srcElement.attributes).forEach((attr) => {
+      if (attr.name.startsWith("on-")) return;
+      newSrcElement.setAttribute(attr.name, attr.value);
+    });
+    return newSrcElement;
+  };
+  const isAnchorBeingClicked = ({ srcElement, eventName }) => {
+    return (srcElement == null ? void 0 : srcElement.tagName) === "A" && eventName === "click";
+  };
+  const clickDefaultAnchor = ({ srcElement }) => {
+    const newAnchor = cloneSrcElement({ srcElement });
+    newAnchor.click();
+  };
   const fireListeners = () => {
-    EVENTS.forEach((event) => {
-      document.body[`on${event}`] = async (e) => {
-        if (EVENTS_FIRE_DOCUMENT_BODY_LISTENERS.includes(event)) {
-          await addScripts();
-          fireLoadListener();
-          fireObserverListeners();
-        }
-        const srcElement = getSrcElement({ srcElement: e == null ? void 0 : e.srcElement, event });
-        const listeners = await fetchListeners({ srcElement, event, e });
-        executeListeners({ e, srcElement, listeners });
-        addListener({ srcElement, event, listeners });
-        if (srcElement == null ? void 0 : srcElement.removeAttribute) srcElement.removeAttribute(`on-${event}`);
+    EVENTS.forEach((eventName) => {
+      document.body[`on${eventName}`] = async (e) => {
+        const srcElement = getSrcElement({ srcElement: e == null ? void 0 : e.srcElement, eventName });
+        const isAnchorClicked = isAnchorBeingClicked({ srcElement, eventName });
+        if (isAnchorClicked) e.preventDefault();
+        const listeners = await fetchListeners({ srcElement, eventName, e });
+        const afterExecuteListeners = isAnchorClicked ? () => {
+          clickDefaultAnchor({ srcElement });
+        } : null;
+        executeListeners({ e, srcElement, listeners, afterExecuteListeners });
+        addListener({ srcElement, eventName, listeners, afterExecuteListeners });
+        if (srcElement == null ? void 0 : srcElement.removeAttribute) srcElement.removeAttribute(`on-${eventName}`);
       };
     });
+    const saloeListenEvent = new CustomEvent("saloeListen", {
+      detail: { message: "This is a custom eventName!" }
+    });
+    document.body.addEventListener("saloeListen", async (e) => {
+      await addScripts();
+      fireLoadListener();
+      fireObserverListeners();
+    });
+    document.body.saloeListen = function() {
+      document.body.dispatchEvent(saloeListenEvent);
+    };
   };
   fireListeners();
   window.onload = () => {
     setTimeout(() => {
-      var _a;
-      (_a = document == null ? void 0 : document.body) == null ? void 0 : _a.click();
+      document.body.saloeListen();
     }, 2500);
   };
 };

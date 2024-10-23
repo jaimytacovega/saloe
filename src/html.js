@@ -85,6 +85,8 @@ const awaitHtml = async ({ pending, success, error }) => {
                 const response = await fetch('${pendingRoutePathname}')
                 const templateString = await response.text()
                 pendingEl.outerHTML = templateString
+
+                if (document?.body?.saloeListen) document?.body?.saloeListen()
             })()
         </script>
     `
