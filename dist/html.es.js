@@ -3,7 +3,7 @@ var __defProp = Object.defineProperty;
 var __template = (cooked, raw) => __freeze(__defProp(cooked, "raw", { value: __freeze(raw || cooked.slice()) }));
 var _a;
 import { stream as stream$1 } from "./worker.es.js";
-import { addRoute, removeRoute } from "./router.es.js";
+import { addRoute } from "./router.es.js";
 import { getScope, getEnv } from "./util.es.js";
 const html = (s, ...args) => {
   var _a2;
@@ -36,8 +36,8 @@ const stream = ({ head, body, scripts, env, status, args }) => {
   ];
   return stream$1({ callbacks, headers, status });
 };
-const awaitHtml = async ({ pending, success, error }) => {
-  const id = Math.floor(Math.random() * 1e9);
+const awaitHtml = async ({ id, pending, success, error }) => {
+  id = id ?? Math.floor(Math.random() * 1e9);
   const pendingId = `pending_${id}`;
   const pendingRoutePathname = `/~/components/${pendingId}`;
   const route = async () => {
@@ -55,7 +55,6 @@ const awaitHtml = async ({ pending, success, error }) => {
       ],
       headers
     });
-    removeRoute({ pathname: pendingRoutePathname });
     return streamResult;
   };
   addRoute({

@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const listener = ({
-  SRC_ELEMEMENTS_QUERY = []
+  SRC_ELEMEMENTS_QUERY = [],
+  listenAfterMs = 2500
 } = {}) => {
   const EVENTS_PREVENT_DEFAULT_MANDATORY = [
     "submit"
@@ -198,13 +199,14 @@ const listener = ({
   window.onload = () => {
     setTimeout(() => {
       document.body.saloeListen();
-    }, 2500);
+    }, listenAfterMs);
   };
 };
 const getScriptListener = ({
-  SRC_ELEMEMENTS_QUERY = []
+  SRC_ELEMEMENTS_QUERY = [],
+  listenAfterMs = 2500
 } = {}) => {
-  return `<script defer>(${listener.toString()})({ SRC_ELEMEMENTS_QUERY: ${JSON.stringify(SRC_ELEMEMENTS_QUERY)} })<\/script>`;
+  return `<script defer>(${listener.toString()})({ SRC_ELEMEMENTS_QUERY: ${JSON.stringify(SRC_ELEMEMENTS_QUERY)}, listenAfterMs: ${listenAfterMs} })<\/script>`;
 };
 exports.getScriptListener = getScriptListener;
 exports.listener = listener;

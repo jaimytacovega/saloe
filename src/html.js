@@ -37,9 +37,9 @@ const stream = ({ head, body, scripts, env, status, args }) => {
     return streamAsWorker({ callbacks, headers, status })
 }
 
-const awaitHtml = async ({ pending, success, error }) => {
-    const id = Math.floor(Math.random() * 1_000_000_000)
-
+const awaitHtml = async ({ id, pending, success, error }) => {
+    id = id ?? Math.floor(Math.random() * 1_000_000_000)
+    
     const pendingId = `pending_${id}`
     const pendingRoutePathname = `/~/components/${pendingId}`
 
@@ -64,7 +64,7 @@ const awaitHtml = async ({ pending, success, error }) => {
             headers, 
         })
 
-        removeRoute({ pathname: pendingRoutePathname })
+        // removeRoute({ pathname: pendingRoutePathname })
 
         return streamResult
     }
