@@ -4,7 +4,7 @@ var __template = (cooked, raw) => __freeze(__defProp(cooked, "raw", { value: __f
 var _a;
 import { stream as stream$1 } from "./worker.es.js";
 import { addRoute } from "./router.es.js";
-import { getScope, getEnv } from "./util.es.js";
+import { isServiceWorker, getScope, getEnv } from "./util.es.js";
 const html = (s, ...args) => {
   var _a2;
   return (_a2 = s == null ? void 0 : s.map((ss, i) => `${ss}${(args == null ? void 0 : args.at(i)) ?? ""}`)) == null ? void 0 : _a2.join("");
@@ -36,7 +36,8 @@ const stream = ({ head, body, scripts, env, status, args }) => {
   ];
   return stream$1({ callbacks, headers, status });
 };
-const awaitHtml = async ({ id, pending, success, error }) => {
+const awaitHtml = async ({ env, id, pending, success, error }) => {
+  if (!isServiceWorker({ env: env ?? (self == null ? void 0 : self.env) })) return success();
   id = id ?? Math.floor(Math.random() * 1e9);
   const pendingId = `pending_${id}`;
   const pendingRoutePathname = `/~/components/${pendingId}`;
@@ -49,7 +50,7 @@ const awaitHtml = async ({ id, pending, success, error }) => {
         async () => html`
                     ${await success().then((template) => template).catch((err) => {
           console.error(err == null ? void 0 : err.stack);
-          return error ? error({ id, err }) : "";
+          return error ? error({ id, err }) : err;
         })}
                 `
       ],

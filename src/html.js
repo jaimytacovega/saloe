@@ -1,6 +1,6 @@
 import { stream as streamAsWorker } from './worker'
 import { addRoute, removeRoute } from './router'
-import { getScope, getEnv } from './util'
+import { getScope, getEnv, isServiceWorker } from './util'
 
 
 const html = (s, ...args) => {
@@ -37,7 +37,9 @@ const stream = ({ head, body, scripts, env, status, args }) => {
     return streamAsWorker({ callbacks, headers, status })
 }
 
-const awaitHtml = async ({ id, pending, success, error }) => {
+const awaitHtml = async ({ env, id, pending, success, error }) => {
+    if (!isServiceWorker({ env: env ?? self?.env })) return success()
+        
     id = id ?? Math.floor(Math.random() * 1_000_000_000)
     
     const pendingId = `pending_${id}`
@@ -56,7 +58,7 @@ const awaitHtml = async ({ id, pending, success, error }) => {
                             .then((template) => template)
                             .catch((err) => {
                                 console.error(err?.stack)
-                                return error ? error({ id, err }) : ''
+                                return error ? error({ id, err }) : err
                             })
                     }
                 `
